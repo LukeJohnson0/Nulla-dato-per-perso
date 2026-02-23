@@ -1,8 +1,9 @@
-var char, yVal, xVal, charWalkSpeed;
+var char, yVal, xVal, charWalkSpeed, charRunSpeed;
 yVal = xVal = charWalkSpeed = 0;
 document.addEventListener('DOMContentLoaded', function() {
     char = document.getElementById("char_sprite");
     charWalkSpeed = 3.4;
+    charRunSpeed = 6.9;
     class playerPos {
         constructor(x, y){
             this.x = x;
@@ -15,13 +16,15 @@ document.addEventListener('DOMContentLoaded', function() {
             char.style.left = -this.x + 'px';        
         }
     }
-    var playerChar = new playerPos(100,100);
+    /*(keycode.shiftKey ? -charRunSpeed :-charWalkSpeed);*/
+    var playerChar = new playerPos(-300, 0);
     document.addEventListener('keydown', (keycode) => {
         switch (keycode.key) {
             case 'w': yVal = charWalkSpeed;break;
-            case 's': yVal = -charWalkSpeed; break;
+            case 's': yVal = -charWalkSpeed;break;
             case 'a': xVal = charWalkSpeed; break;
             case 'd': xVal = -charWalkSpeed; break;
+            default: yVal = 0; xVal = 0; break;
         }
     });
     document.addEventListener('keyup', (keycodeUp)=>{
