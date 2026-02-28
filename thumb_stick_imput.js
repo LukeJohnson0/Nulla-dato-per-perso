@@ -16,26 +16,25 @@ document.addEventListener('DOMContentLoaded', loaded => {
 			this.touchIntX = touchIntX; // accessed through another file.
 			this.touchIntY = touchIntY;
 			this.onClicked = onClicked = false;
-			shape.addEventListener( /*'ontouchstart',*/ "pointerdown", onClick => {});
-			setTimeout(() => {
-				const updateLeaveTouch = (onClick) => {
-					switch(onClick.type) {
-						case "pointerdown":
-							this.onClicked = true;
-							break;
-						default:
-							this.onClicked = false;
-							break;
-					}
-				}
-			}, 3.2);
+			const inputMap = {
+				'touchstart': true,
+				'touchend' : false,
+				'mousedown' : true,
+				'mouseup' : false,
+				'pointerleave' : false
+			};
+			Object.entries(inputMap).forEach(([eventType, state]) =>{
+				shape.addEventListener(eventType, () =>{
+					this.onClicked = state;
+				});
+			});
 			window.addEventListener(( /*"touchmove", */ "mousemove"), clientInput => {
 				this.touchIntX = clientInput.clientX;
 				this.touchIntY = clientInput.clientY;
 			})
 		}
 		updateFunc() {
-			console.log(`${this.onClicked}`);
+			//console.log(`${this.onClicked}`);
 			if(this.onClicked) {
 				console.log(`Position: ${this.touchIntX}, ${this.touchIntY}`);
 				shape.style.top = this.touchIntY + 'px';
