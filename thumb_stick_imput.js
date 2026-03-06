@@ -1,7 +1,11 @@
+/*
+    This code is used for handling thumbUI and its movement.
+    Time complexity : O(1);
+*/
 document.addEventListener('DOMContentLoaded', loaded => {
     var shape;
     var input;
-    const init={
+    const init={ 
 		x:300 + "px",
 		y:300 + "px",
 	}
@@ -36,7 +40,6 @@ document.addEventListener('DOMContentLoaded', loaded => {
     }
     
     drawUI();
-    
     class updateInput {
         constructor(touchIntX, touchIntY, onClicked) {
             this.touchIntX = touchIntX;
@@ -81,24 +84,22 @@ document.addEventListener('DOMContentLoaded', loaded => {
 					shape.style.y = lastPos.y;
 			}
 			else{
-				this.limit = false;
-				console.log(this.limit);
+                setTimeout(()=>{this.limit = false;}, .6);
 			}
 		}
         callUPD() {
+            //console.log(`left:${shape.style.left}, top:${shape.style.top}`);
+            //console.log(this.limit);
+            this.limitBound();
             if(this.onClicked && !this.limit) {
                 //console.log(`Position: ${this.touchIntX}, ${this.touchIntY}`);
                 shape.style.left = (this.touchIntX - this.boundRectX)  + "px";
                 shape.style.top = (this.touchIntY - this.boundRectY) + "px";
-				this.limitBound();
                 //console.log(`UI: ${shape.style.top}, ${shape.style.left}`);
             }
 			else if(!this.onClicked){
 				shape.style.left = bound.style.left = init.x;
 				shape.style.top =bound.style.top  =init.y;
-			}
-			else{
-				
 			}
         }
     }
@@ -109,9 +110,7 @@ document.addEventListener('DOMContentLoaded', loaded => {
 
     function updateFunc() {
         requestAnimationFrame(updateFunc);
-        if(input) {
-            input.callUPD();
-        }
+        if(input) input.callUPD();
     }
     updateFunc();
 });
