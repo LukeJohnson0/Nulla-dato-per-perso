@@ -1,28 +1,18 @@
-/*
-    This code is used for handling thumbUI and its movement.
-    Time complexity : O(1);
-*/
-const init = {
+const init = { // i've put it out of the DOMContentLoaded to make it a global variable through the whole codebase
     x: 300,
     y: 300,
     radius: 70
 }
 var shape;
-document.addEventListener('DOMContentLoaded', loaded => {
+document.addEventListener('DOMContentLoaded', loaded => { // DOMContentLoaded is recquired, because it didn't work without
     var input;
     const usrAgent = /iPhone|iPad/.test(navigator.userAgent);
     function drawUI() {
-        if (loaded) {
-            shape = document.getElementById("inputUI");
+        if (loaded) { // i used another shape to limit the movement of that circle
+            shape = document.getElementById("inputUI"); // actually that circle isn't even that useful, i'm probably gonna hide it
             const ctx = shape.getContext("2d");
             bound = document.getElementById("boundRec");
             const ctx2 = bound.getContext("2d");
-            /* transform is represented in this matrix:
-            ┌ 		  ┐		┌ 		   ┐
-            │ a  c  e │		│ 1  0  25 │
-            │ b  d  f │ =>  │ 0  1  0  │
-            │ 0  0  1 │		│ 0  0  1  │
-            └ 		  ┘		└ 		   ┘ */
             ctx.transform(1, 0, 0, 1, 25, 0);
             ctx.beginPath();
             ctx.arc(75, 100, 40, 0, 2 * Math.PI);
@@ -40,21 +30,21 @@ document.addEventListener('DOMContentLoaded', loaded => {
 
     drawUI();
     class updateInput {
-        constructor (touchIntX, touchIntY, onClicked) {
+        constructor (touchIntX, touchIntY, onClicked) { // i made this part a long time ago i don't remember shit abt it
             this.touchIntX = touchIntX;
             this.touchIntY = touchIntY;
             this.onClicked = onClicked = false;
             this.boundRectX = 0;
             this.boundRectY = 0;
-            const inputMapIn = {
-                'touchstart': true,
+            const inputMapIn = { // i actually had to separate the true/false because it would catch NULL stuff from false ones
+                'touchstart': true, // i hate console errors sooo....
                 'mousedown': true,
             };
 
             Object.entries(inputMapIn).forEach(([eventType, state]) => {
                 shape.addEventListener(eventType, (e) => {
                     e.preventDefault();
-                    const boundRect = shape.getBoundingClientRect();
+                    const boundRect = shape.getBoundingClientRect(); // without this it isn't centered, why? idk
                     this.boundRectX = (e.touches ? e.touches[0].clientX : e.clientX ) - boundRect.left;
                     this.boundRectY = (e.touches ? e.touches[0].clientY : e.clientY) - boundRect.top;
                     this.onClicked = state;
@@ -85,7 +75,8 @@ document.addEventListener('DOMContentLoaded', loaded => {
                     this.touchIntY = clientInput.clientY;});
             }
         }
-        outOfBound(x, y, radius) {
+        // had to prevent EVERY default smh bc of that shitty touch navigations messing up the assigns
+        outOfBound(x, y, radius) { // this part of math, i actually searched it up (who knows math duh)
             let distance = Math.sqrt(((x - init.x) ** 2) + ((y - init.y) ** 2));
             if (distance > radius) {
                 let teta = Math.atan2(y - init.y, x - init.x);
@@ -121,4 +112,4 @@ document.addEventListener('DOMContentLoaded', loaded => {
         if (input) input.callUPD();
     }
     updateFunc();
-});
+});// i actually put this code in an AI scanner just for fun, why tf does it say 70%..
