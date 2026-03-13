@@ -2,14 +2,14 @@
     This code is used for handling thumbUI and its movement.
     Time complexity : O(1);
 */
+const init = {
+    x: 300,
+    y: 300,
+    radius: 70
+}
+var shape;
 document.addEventListener('DOMContentLoaded', loaded => {
-    var shape;
     var input;
-    const init = {
-        x: 300,
-        y: 300,
-        radius: 70
-    }
     const usrAgent = /iPhone|iPad/.test(navigator.userAgent);
     function drawUI() {
         if (loaded) {
@@ -48,7 +48,6 @@ document.addEventListener('DOMContentLoaded', loaded => {
             this.boundRectY = 0;
             const inputMapIn = {
                 'touchstart': true,
-                'touchend': false,
                 'mousedown': true,
             };
 
@@ -62,22 +61,22 @@ document.addEventListener('DOMContentLoaded', loaded => {
                 }, {passive:false});
             });
             const inputMapOut = {
+                'touchend': false,
                 'mouseup': false,
-                'pointerleave' : false,
                 'touchcancel' : false
             };
-            Object.entries(inputMapOut).forEach(([type, state])=>{
-                shape.addEventListener(type, (e)=>{
+            Object.entries(inputMapOut).forEach(([eventType, state]) => {
+                shape.addEventListener(eventType, (e) => {
                     e.preventDefault();
                     this.onClicked = state;
-                },{passive:false});
+                }, { passive: false });
             });
             if(usrAgent){
                     console.log("phgone");
                     shape.addEventListener("touchmove", (clientInput) => {
                     clientInput.preventDefault();
-                    this.touchIntX = clientInput.touches.item(0).clientX;
-                    this.touchIntY = clientInput.touches.item(0).clientY;},{passive:false});
+                    this.touchIntX = clientInput.touches[0].clientX;
+                    this.touchIntY = clientInput.touches[0].clientY;},{passive:false});
                     // console.log(this.touchIntY); console.log(this.touchIntX);
             }
             else{
