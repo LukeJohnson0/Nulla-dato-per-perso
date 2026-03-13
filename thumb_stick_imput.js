@@ -46,28 +46,36 @@ document.addEventListener('DOMContentLoaded', loaded => {
             this.onClicked = onClicked = false;
             this.boundRectX = 0;
             this.boundRectY = 0;
-            const inputMap = {
+            const inputMapIn = {
                 'touchstart': true,
                 'touchend': false,
                 'mousedown': true,
-                'mouseup': false,
-                'pointerleave' : false,
-                "touchcancel" : false
             };
 
-            Object.entries(inputMap).forEach(([eventType, state]) => {
+            Object.entries(inputMapIn).forEach(([eventType, state]) => {
                 shape.addEventListener(eventType, (e) => {
                     e.preventDefault();
-                    var boundRect = shape.getBoundingClientRect();
+                    const boundRect = shape.getBoundingClientRect();
                     this.boundRectX = (e.touches ? e.touches[0].clientX : e.clientX ) - boundRect.left;
                     this.boundRectY = (e.touches ? e.touches[0].clientY : e.clientY) - boundRect.top;
                     this.onClicked = state;
                 }, {passive:false});
             });
+            const inputMapOut = {
+                'mouseup': false,
+                'pointerleave' : false,
+                'touchcancel' : false
+            };
+            Object.entries(inputMapOut).forEach(([type, state])=>{
+                shape.addEventListener(type, (e)=>{
+                    e.preventDefault();
+                    this.onClicked = state;
+                },{passive:false});
+            });
             if(usrAgent){
                     console.log("phgone");
-                    shape.addEventListener("touchmove", clientInput => {
-                        clientInput.preventDefault();
+                    shape.addEventListener("touchmove", (clientInput) => {
+                    clientInput.preventDefault();
                     this.touchIntX = clientInput.touches.item(0).clientX;
                     this.touchIntY = clientInput.touches.item(0).clientY;},{passive:false});
                     // console.log(this.touchIntY); console.log(this.touchIntX);
